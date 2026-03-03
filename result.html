@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,7 +18,9 @@
       --yesHover: #ff1f68;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -47,19 +50,21 @@
       backdrop-filter: blur(10px);
       border-radius: 22px;
       text-align: center;
-      box-shadow: 0 18px 60px rgba(0,0,0,.15);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, .15);
     }
 
     .art {
       width: min(260px, 80vw);
       margin: 0 auto 10px;
       display: block;
-      filter: drop-shadow(0 10px 14px rgba(0,0,0,.12));
+      filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .12));
     }
 
-    .art-img{
-      width: 160px;      /* ปรับได้ */
-      height: 160px;     /* ปรับได้ */
+    .art-img {
+      width: 160px;
+      /* ปรับได้ */
+      height: 160px;
+      /* ปรับได้ */
       object-fit: contain;
       display: block;
       margin: 0 auto 18px;
@@ -88,7 +93,7 @@
       border-radius: 999px;
       border: none;
       cursor: pointer;
-      box-shadow: 0 10px 24px rgba(0,0,0,.14);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .14);
       user-select: none;
       -webkit-tap-highlight-color: transparent;
       transition: transform .12s ease, background .12s ease;
@@ -99,7 +104,10 @@
       background: var(--yes);
       color: #fff;
     }
-    #yesBtn:hover { background: var(--yesHover); }
+
+    #yesBtn:hover {
+      background: var(--yesHover);
+    }
 
     #noBtn {
       left: 62%;
@@ -131,8 +139,15 @@
     }
 
     @keyframes pop {
-      from { transform: scale(.96); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      from {
+        transform: scale(.96);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
   </style>
 </head>
@@ -147,12 +162,12 @@
     <h1 id="output">(Dowloading..)</h1>
 
     <script>
-    const params = new URLSearchParams(window.location.search);
-    const msg = params.get("msg");
+      const params = new URLSearchParams(window.location.search);
+      const msg = params.get("msg");
 
-    // ปลอดภัย: ใช้ textContent ไม่ใช้ innerHTML
-    document.getElementById("output").textContent = msg ? msg : "(No message provided)";
-  </script>
+      // ปลอดภัย: ใช้ textContent ไม่ใช้ innerHTML
+      document.getElementById("output").textContent = msg ? msg : "(No message provided)";
+    </script>
 
     <section class="button-zone" id="zone">
       <button id="yesBtn">Yes</button>
@@ -164,11 +179,7 @@
 
     <section class="result" id="result">
       <h2>YAY! 🎉</h2>
-      <img
-        class="fireworks"
-        src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
-        alt="Fireworks"
-      />
+      <img class="fireworks" src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" alt="Fireworks" />
     </section>
   </main>
 
@@ -247,10 +258,10 @@
       dy /= mag;
 
       let newLeft = (b.left - z.left) + dx * 150;
-      let newTop  = (b.top - z.top) + dy * 150;
+      let newTop = (b.top - z.top) + dy * 150;
 
       newLeft = clamp(newLeft, 0, z.width - b.width);
-      newTop  = clamp(newTop, 0, z.height - b.height);
+      newTop = clamp(newTop, 0, z.height - b.height);
 
       noBtn.style.left = newLeft + "px";
       noBtn.style.top = newTop + "px";
@@ -268,7 +279,20 @@
       if (d < 140) moveNo(e.clientX, e.clientY);
     });
 
-    noBtn.addEventListener("click", e => e.preventDefault());
+    noBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    }, true);
+
+    noBtn.style.touchAction = "none";
+
+    noBtn.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      try { noBtn.setPointerCapture(e.pointerId); } catch { }
+      moveNo(e.clientX, e.clientY);
+    }, { passive: false });
 
     /* ---------- YES CLICK ---------- */
     yesBtn.addEventListener("click", () => {
@@ -280,7 +304,5 @@
     });
   </script>
 </body>
+
 </html>
-
-
-
