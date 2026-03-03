@@ -270,6 +270,21 @@
       growYes();
     }
 
+    function teleportNoToCorner() {
+      const z = zone.getBoundingClientRect();
+      const b = noBtn.getBoundingClientRect();
+
+      const pad = 8; // ระยะห่างขอบ
+      const left = z.width - b.width - pad; // ขวา
+      const top = pad;                     // บน
+
+      noBtn.style.left = left + "px";
+      noBtn.style.top = top + "px";
+      noBtn.style.transform = "none";
+
+      growYes();
+    }
+
     zone.addEventListener("pointermove", e => {
       const b = noBtn.getBoundingClientRect();
       const d = Math.hypot(
@@ -292,6 +307,12 @@
       e.stopPropagation();
       try { noBtn.setPointerCapture(e.pointerId); } catch { }
       moveNo(e.clientX, e.clientY);
+    }, { passive: false });
+
+    noBtn.addEventListener("pointerup", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      teleportNoToCorner();
     }, { passive: false });
 
     /* ---------- YES CLICK ---------- */
